@@ -26,40 +26,45 @@ document.addEventListener('DOMContentLoaded', function() {
     var occupationList = document.getElementById('occupation');
     occupationList.addEventListener('change', function() {
         var selectedOption = signUp.elements['occupation'].value;
-        if(selectedOption == 'other') {
-            signUp.elements['occupationOther'].style.dsplay = 'block';
+        var other = document.getElementsByName('occupationOther')[0];
+        if (selectedOption == 'other') {
+            other.style.display = 'block';
+        } else {
+            other.style.display = 'none';
         }
     });
 
     //Confirm the "No Thanks" Button
     //add an event listener for the 'click' even on the cancel button
     var cancelButton = document.getElementById('cancelButton');
-    console.log(cancelButton);
-    cancelButton.addEventListener('click', function() {
-        if(window.confirm("Are you really sure you want to leave?")) {
+    //console.log(cancelButton);
+    cancelButton.addEventListener('click', function () {
+        if (window.confirm("Are you really sure you want to leave?")) {
             window.location = 'http://ischool.uw.edu';
         }
     });
 
     //Validate the Form Before Submit
-    document.getElementById('signup').addEventListener('submit', onSubmit);
+    signUp.addEventListener('submit', onSubmit);
 
-
-    function onSubmit(evt) {
+    function onSubmit(event) {
         //document.getElementById("myText").value = "Johnny Bravo";
         //firstName, lastName, address1, city, state, zip, birthdate
+        var valid = true;
         try {
-            var valid = validateForm(this); //this refers to the form
+            valid = validateForm(this); //this refers to the form
         }
         catch(exception) {
-            console.log(exception);
             valid = false;
+            console.log(exception);
+            alert(exception);
         }
-        if (!valid && evt.preventDefault) {
-            evt.preventDefault();
+        if (!valid && event.preventDefault) {
+            event.preventDefault();
         }
-        evt.returnValue = valid;
 
+        event.returnValue = valid;
+        console.log(valid);
         return valid;
     }
 
@@ -74,15 +79,19 @@ document.addEventListener('DOMContentLoaded', function() {
         var idx;
         var valid = true;
 
-        if (signUp.elements['occupation'].value == 'other') {
+        if (document.getElementById('occupation').value == 'other') {
             requiredFields.push('occupationOther');
         }
 
         for(idx = 0; idx < requiredFields.length; idx++) {
             valid &= validateRequiredField(form.elements[requiredFields[idx]]);
         }
-        valid &= validateZip(signUp.elements['zip']);
-        valid &= validateAge(signUp.elements['birthdate']);
+        if(!validateZip(signUp.elements['zip'])) {
+            valid = false;
+        }
+        if(validateAge(signUp.elements['birthdate'])) {
+            valid = false;
+        }
         return valid;
     }
 
@@ -91,8 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * it will mark the field as invalid and return false. Otherwise it will return true.
      * */
     function validateRequiredField(field) {
-        var value = field.value;
-        value = value.trim();
+        var value = field.value.trim();
         var valid = value.length >0;
 
         if(valid) {
@@ -129,5 +137,3 @@ document.addEventListener('DOMContentLoaded', function() {
         return validAge;
     }
 });
-
-//validate form
