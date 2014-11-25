@@ -44,20 +44,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    //Validate the Form Before Submit
     signUp.addEventListener('submit', onSubmit);
 
+});
+
+    //Validate the Form Before Submit
     function onSubmit(event) {
         //document.getElementById("myText").value = "Johnny Bravo";
         //firstName, lastName, address1, city, state, zip, birthdate
         var valid = true;
+
         try {
             valid = validateForm(this); //this refers to the form
         }
         catch(exception) {
             valid = false;
             console.log(exception);
-            alert(exception);
         }
         if (!valid && event.preventDefault) {
             event.preventDefault();
@@ -65,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         event.returnValue = valid;
         console.log(valid);
-        return valid;
     }
 
     /* validateForm()
@@ -86,10 +87,14 @@ document.addEventListener('DOMContentLoaded', function() {
         for(idx = 0; idx < requiredFields.length; idx++) {
             valid &= validateRequiredField(form.elements[requiredFields[idx]]);
         }
-        if(!validateZip(signUp.elements['zip'])) {
+
+        if(!validateZip(form.elements['zip'])) {
             valid = false;
+            form.elements['zip'].style.border = "1px solid #FF0000";
+        } else {
+            form.elements['zip'].style.border = "1px solid GRAY";
         }
-        if(validateAge(signUp.elements['birthdate'])) {
+        if(!validateAge(document.getElementById('birthdate'))) {
             valid = false;
         }
         return valid;
@@ -114,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //validate zip code, must be 5 digits
     function validateZip(zip) {
         var zipRegExp = new RegExp('^\\d{5}$');
-        return zipRegExp.test(zip);
+        return zipRegExp.test(zip.value);
     }
 
     //validate age, must be 13 years older
@@ -134,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if(!validAge) {
             document.getElementById('birthdateMessage').innerHTML = 'Sorry, the user must be 13 years or older to sign up.';
         }
+        console.log('age：' + validAge);
         return validAge;
     }
-});
+//});
