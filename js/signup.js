@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             valid = false;
             form.elements['zip'].style.border = "1px solid #FF0000";
         } else {
-            form.elements['zip'].style.border = "1px solid GRAY";
+            form.elements['zip'].style.border = "1px solid #CCC";
         }
         if(!validateAge(document.getElementById('birthdate'))) {
             valid = false;
@@ -137,7 +137,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(yearsDiff);
         validAge = yearsDiff >= 13;
         if(!validAge) {
+            birthdate.style.border = "1px solid #FF0000";
             document.getElementById('birthdateMessage').innerHTML = 'Sorry, the user must be 13 years or older to sign up.';
+        } else {
+           birthdate.style.border = "1px solid #CCC";
+            document.getElementById('birthdateMessage').innerHTML = null;
         }
         console.log('age：' + validAge);
         return validAge;
