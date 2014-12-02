@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
             other.style.display = 'block';
         } else {
             other.style.display = 'none';
+            other.value = "";
         }
     });
 
